@@ -16,15 +16,16 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    let lastScroll = 0;
+    let lastPageYOffset = window.pageYOffset;
+
     window.addEventListener('scroll', () => {
-      const scrollingUp = window.pageYOffset < lastScroll;
+      const scrollingUp = window.pageYOffset < lastPageYOffset;
 
       if (window.pageYOffset > window.innerHeight) {
-        const newKey = Number(this.state.sections[2].key) + 1;
+        const newKey = this.state.sections[2].props.index + 1;
         const prevSection = this.state.sections.shift();
-        this.setState({ prevSections: [...this.state.prevSections, prevSection] });
         this.setState({
+          prevSections: [...this.state.prevSections, prevSection],
           sections: [
             ...this.state.sections,
             <Section key={newKey} index={newKey} bgColor={GenerateHexColor()} />
@@ -39,7 +40,8 @@ class App extends React.Component {
         });
         window.scrollTo(0, window.innerHeight)
       }
-      lastScroll = window.pageYOffset;
+
+      lastPageYOffset = window.pageYOffset;
     });
   }
 
